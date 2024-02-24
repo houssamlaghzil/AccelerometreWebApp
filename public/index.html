@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style id="themeStyle">
+        :root {
+            --background-color: #f4f4f4;
+            --text-color: #333;
+            --accent-color: #007bff;
+            --button-bg-color: #007bff;
+            --button-text-color: white;
+            --button-hover-bg-color: #0056b3;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        h1, h2 {
+            color: var(--text-color);
+        }
+        h1 {
+            color: #007bff;
+            text-align-last: center;
+        }
+
+        #currentSpeed, #maxSpeed {
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        button {
+            background-color: var(--button-bg-color);
+            color: var(--button-text-color);
+            border: none;
+            padding: 10px 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: var(--button-hover-bg-color);
+        }
+
+        audio {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .theme-switcher {
+            margin-bottom: 20px;
+        }
+    </style>
+    <title>Accéléromètre V2</title>
+</head>
+<body>
+<div class="theme-switcher">
+    <button onclick="toggleTheme()" style="
+    width: 16em;
+    height: 1em;
+    font-size: 9px;
+">Passer au mode sombre</button>
+</div>
+<h1>Accéléromètre V2</h1>
+<h2>Vitesse actuelle: <span id="currentSpeed">0</span> km/h</h2>
+<h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span> km/h</h3>
+<ul id="speedHistory"></ul>
+
+<audio id="audio" src="music.mp3"></audio>
+
+<button onclick="playMusic()">Lire la musique</button>
+<button onclick="stopMusic()">Arrêter la musique</button>
+<button onclick="clearCacheAndCookies()">Vider le cache et supprimer les cookies</button>
+
+<script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+                console.log('Service Worker enregistré avec succès:', registration.scope);
+            }, function (err) {
+                navigator.vibrate([100, 5, 100, 2, 50]);
+                console.error("Échec de l'enregistrement du Service Worker:", err);
+            });
+        });
+    }
+</script>
+
+<script>
+    let speedHistory = [];
+    let audio = document.getElementById("audio");
+    let audioPlayed = false;
+    let firstSpeed = null;
+    let maxSpeed = 0;
+
+    function calculateSpeed(acceleration) {
+        return Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2) * 3.6;
+    }
+
+    function adjustPlaybackRate(currentSpeed) {
+        if (currentSpeed >= 100 && currentSpeed <= 130) {
+            let rate = 1 + (currentSpeed - 100) * (1 / 30);
+            audio.playbackRate = rate;
+        } else if (currentSpeed < 100) {
+            audio.playbackRate = 1;
+        }
+    }
+
+    function updateSpeed(event) {
+        const acceleration = event.accelerationIncludingGravity;
+        const speed = calculateSpeed(acceleration);
+
+        if (firstSpeed === null) {
+            firstSpeed = speed;
+        }
+
+        const adjustedSpeed = Math.max(0, speed - firstSpeed);
+
+        speedHistory.push(adjustedSpeed);
+        if (speedHistory.length > 10) {
+            speedHistory.shift();
+        }
+
+        maxSpeed = Math.max(...speedHistory);
+
+        document.getElementById("currentSpeed").textContent = adjustedSpeed.toFixed(2);
+        document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
+
+        adjustPlaybackRate(adjustedSpeed);
+
+        if (adjustedSpeed >= 100 && !audioPlayed) {
+            playMusic();
+            audioPlayed = true;
+        }
+    }
+
+    function playMusic() {
+        audio.play();
+    }
+
+    function stopMusic() {
+        navigator.vibrate([10, 5, 10, 2, 50]);
+        audio.pause();
+        audio.currentTime = 0;
+        audioPlayed = false;
+    }
+
+    function clearCacheAndCookies() {
+        navigator.vibrate([100, 5, 10, 50, 50]);
+        if (caches) {
+            caches.keys().then(function (cacheNames) {
+                cacheNames.forEach(function (cacheName) {
+                    caches.delete(cacheName);
+                });
+            });
+        }
+
+        document.cookie.split(";").forEach(function (c) {
+            document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+        });
+    }
+
+    if (window.DeviceMotionEvent) {
+        window.addEventListener("devicemotion", updateSpeed);
+    } else {
+        alert("Désolé, votre appareil ne supporte pas l'accéléromètre.");
+    }
+
+    setInterval(() => {
+        maxSpeed = Math.max(...speedHistory);
+        document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
+    }, 10000);
+</script>
+
+<script>
+    // Votre script JavaScript reste inchangé
+
+    let isDarkMode = false;
+
+    function toggleTheme() {
+        navigator.vibrate([10, 5, 10, 2, 10]);
+        isDarkMode = !isDarkMode;
+
+        if (isDarkMode) {
+            document.documentElement.style.setProperty('--background-color', '#333');
+            document.documentElement.style.setProperty('--text-color', '#f4f4f4');
+            document.documentElement.style.setProperty('--accent-color', '#4d9fea');
+            document.documentElement.style.setProperty('--button-bg-color', '#555');
+            document.documentElement.style.setProperty('--button-text-color', '#fff');
+            document.documentElement.style.setProperty('--button-hover-bg-color', '#777');
+            document.querySelector('.theme-switcher button').textContent = 'Passer au mode clair';
+        } else {
+            document.documentElement.style.setProperty('--background-color', '#f4f4f4');
+            document.documentElement.style.setProperty('--text-color', '#333');
+            document.documentElement.style.setProperty('--accent-color', '#007bff');
+            document.documentElement.style.setProperty('--button-bg-color', '#007bff');
+            document.documentElement.style.setProperty('--button-text-color', 'white');
+            document.documentElement.style.setProperty('--button-hover-bg-color', '#0056b3');
+            document.querySelector('.theme-switcher button').textContent = 'Passer au mode sombre';
+        }
+    }
+</script>
+</body>
+</html>
