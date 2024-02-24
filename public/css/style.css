@@ -1,0 +1,54 @@
+:root {
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --accent-color: #007bff;
+    --button-bg-color: #007bff;
+    --button-text-color: white;
+    --button-hover-bg-color: #0056b3;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+h1, h2 {
+    color: var(--text-color);
+}
+
+h1 {
+    color: #007bff;
+    text-align-last: center;
+}
+
+#currentSpeed, #maxSpeed {
+    font-weight: bold;
+    color: var(--accent-color);
+}
+
+button {
+    background-color: var(--button-bg-color);
+    color: var(--button-text-color);
+    border: none;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+button:hover {
+    background-color: var(--button-hover-bg-color);
+}
+
+audio {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.theme-switcher {
+    margin-bottom: 20px;
+}
