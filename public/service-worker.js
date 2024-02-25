@@ -10,7 +10,6 @@ self.addEventListener('install', function(event) {
                 '/index.html',
                 '/manifest.json',
                 '/music.mp3',
-                '/css/style.css',
                 '/icon.png'
                 // Add other resources to cache here
             ]);
