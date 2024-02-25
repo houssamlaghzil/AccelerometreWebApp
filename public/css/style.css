@@ -24,6 +24,13 @@ h1 {
     text-align-last: center;
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 #currentSpeed, #maxSpeed {
     font-weight: bold;
     color: var(--accent-color);
@@ -51,4 +58,20 @@ audio {
 
 .theme-switcher {
     margin-bottom: 20px;
+}
+
+
+
+
+
+.viewport {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+    position: relative;
+}
+
+.viewport video {
+    width: 100%;
 }

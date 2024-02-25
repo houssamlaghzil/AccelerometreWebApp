@@ -71,6 +71,13 @@
 </div>
 <h1>Accéléromètre V2</h1>
 <h2>Vitesse actuelle: <span id="currentSpeed">0</span> km/h</h2>
+
+
+<span id="calculateTotalAcc"></span>
+<br>
+<span id="speed"></span>
+
+
 <h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span> km/h</h3>
 <ul id="speedHistory"></ul>
 
@@ -99,45 +106,69 @@
     let audioPlayed = false;
     let firstSpeed = null;
     let maxSpeed = 0;
+    let speed = 0;
+    let startTime = new Date().getTime();
+    let NewAcceleration = 0;
+    let totalAcc = 0;
 
-    function calculateSpeed(acceleration) {
-        return Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2) * 3.6;
-    }
-
-    function adjustPlaybackRate(currentSpeed) {
-        if (currentSpeed >= 100 && currentSpeed <= 130) {
-            let rate = 1 + (currentSpeed - 100) * (1 / 30);
-            audio.playbackRate = rate;
-        } else if (currentSpeed < 100) {
-            audio.playbackRate = 1;
+    function calculateTotalAcc(acceleration) {
+        if (acceleration.z < 0) {
+            acceleration.z = -(Math.sqrt(acceleration.z ** 2 ));
         }
+        else {
+            acceleration.z = Math.sqrt(acceleration.z ** 2 );
+        }
+        return acceleration.z ** 2;
+        //return Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2) * 3.6;
     }
 
     function updateSpeed(event) {
-        const acceleration = event.accelerationIncludingGravity;
-        const speed = calculateSpeed(acceleration);
+        const FirstAcceleration = event.acceleration;
+
+        totalAcc = calculateTotalAcc(FirstAcceleration);
+        const deltaTime = (new Date().getTime()) - startTime;
+        speed = ((totalAcc - NewAcceleration) + speed);
+        NewAcceleration = totalAcc;
+
+
+        const speedInKm = speed / 3.6;
+        let speedList = [];
+        speedList.push(speed);
+
+        // faire la moyenne des valeurs de speedlist
+        let total = 0;
+        for (let i = 0; i < speedList.length; i++) {
+            total += speedList[i];
+        }
+        let avg = total / speedList.length;
+
 
         if (firstSpeed === null) {
             firstSpeed = speed;
         }
-
-        const adjustedSpeed = Math.max(0, speed - firstSpeed);
-
-        speedHistory.push(adjustedSpeed);
+        speedHistory.push(speedInKm);
         if (speedHistory.length > 10) {
             speedHistory.shift();
         }
-
         maxSpeed = Math.max(...speedHistory);
+        setInterval(() => {
+            document.getElementById("currentSpeed").textContent = speedInKm.toFixed(2);
+            document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
+            speedList = [];
+        }, 1000);
+        adjustPlaybackRate(speedInKm);
 
-        document.getElementById("currentSpeed").textContent = adjustedSpeed.toFixed(2);
-        document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
-
-        adjustPlaybackRate(adjustedSpeed);
-
-        if (adjustedSpeed >= 100 && !audioPlayed) {
+        if (speedInKm >= 100 && !audioPlayed) {
             playMusic();
             audioPlayed = true;
+        }
+    }
+
+    function adjustPlaybackRate(currentSpeed) {
+        if (currentSpeed >= 100 && currentSpeed <= 130) {
+            audio.playbackRate = 1 + (currentSpeed - 100) * (1 / 30);
+        } else if (currentSpeed < 100) {
+            audio.playbackRate = 1;
         }
     }
 
