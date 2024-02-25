@@ -69,7 +69,7 @@
     font-size: 9px;
 ">Passer au mode sombre</button>
 </div>
-<h1>Accéléromètre V2</h1>
+<h1>Accéléromètre V3</h1>
 <h2>Vitesse actuelle: <span id="currentSpeed">0</span> km/h</h2>
 
 
@@ -110,6 +110,8 @@
     let startTime = new Date().getTime();
     let NewAcceleration = 0;
     let totalAcc = 0;
+    let lastUpdateTime = Date.now();
+
 
     function calculateTotalAcc(acceleration) {
         if (acceleration.z < 0) {
@@ -151,11 +153,11 @@
             speedHistory.shift();
         }
         maxSpeed = Math.max(...speedHistory);
-        setInterval(() => {
+        if (Date.now() - lastUpdateTime >= 250) {
             document.getElementById("currentSpeed").textContent = speedInKm.toFixed(2);
             document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
-            speedList = [];
-        }, 1000);
+            lastUpdateTime = Date.now(); // Mettre à jour le dernier temps de mise à jour
+        }
         adjustPlaybackRate(speedInKm);
 
         if (speedInKm >= 100 && !audioPlayed) {
