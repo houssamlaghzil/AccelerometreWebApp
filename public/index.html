@@ -60,9 +60,9 @@
             margin-bottom: 20px;
         }
     </style>
-    <title>Accéléromètre V2</title>
+    <title id="titleOnglet">Accéléromètre V2.5</title>
 </head>
-<body>
+<body id="page">
 <div class="theme-switcher">
     <button onclick="toggleTheme()" style="
     width: 16em;
@@ -71,8 +71,8 @@
 ">Passer au mode sombre
     </button>
 </div>
-<h1>Accéléromètre V2</h1>
-<h2>Vitesse actuelle: <span id="currentSpeed">0</span> km/h</h2>
+<h1>Accéléromètre V2.5</h1>
+<h2>Vitesse actuelle: <span id="currentSpeed">0</span></h2>
 
 
 <span id="calculateTotalAcc"></span>
@@ -80,7 +80,7 @@
 <span id="speed"></span>
 
 
-<h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span> km/h</h3>
+<h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span></h3>
 <ul id="speedHistory"></ul>
 <ul id="save"></ul>
 
@@ -112,12 +112,14 @@
 
     // Fonction pour mettre à jour la vitesse à partir des données GPS
     function updateSpeed(position) {
+        document.getElementById('currentSpeed').innerHTML = '.';
         // Vérifier si la vitesse est disponible dans les données de position
         if (position.coords.speed !== null) {
             // Convertir la vitesse de m/s en km/h
             const speedKmh = (position.coords.speed * 3.6).toFixed(2);
             // Mettre à jour la balise HTML avec la vitesse
             document.getElementById('speed').innerText = speedKmh + ' km/h';
+            document.getElementById('currentSpeed').innerText = speedKmh + ' km/h';
             if (speedKmh >= 100 && !audioPlayed) {
                 playMusic();
                 audioPlayed = true;
@@ -134,15 +136,21 @@
         document.getElementById('speed').innerText = 'Impossible de récupérer la vitesse';
     }
 
+
     // Obtenir la position et la vitesse à partir du GPS
     if (navigator.geolocation) {
+        document.getElementById('currentSpeed').innerHTML = '..';
         // Options pour la récupération de la vitesse
         var options = {
             enableHighAccuracy: true, // Utiliser une haute précision
             maximumAge: 0 // Ne pas utiliser de cache pour la position
         };
         // Obtenir la position actuelle
-        navigator.geolocation.getCurrentPosition(updateSpeed, errorGettingSpeed, options);
+        setInterval(function () {
+            document.getElementById('currentSpeed').innerHTML = '...';
+            navigator.geolocation.getCurrentPosition(updateSpeed, errorGettingSpeed, options);
+            adjustPlaybackRate(document.getElementById('currentSpeed').innerText);
+        }, 400);
     } else {
         // Si la géolocalisation n'est pas prise en charge par le navigateur
         document.getElementById('speed').innerText = 'La géolocalisation n\'est pas prise en charge';
@@ -182,6 +190,7 @@
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
     }
+
 </script>
 
 <script>
@@ -211,6 +220,137 @@
             document.querySelector('.theme-switcher button').textContent = 'Passer au mode sombre';
         }
     }
+</script>
+
+<script>
+
+
+    const mouseTarget = document.getElementById('page'); // Remplacez 'page' par l'ID de votre élément <body>
+    mouseTarget.addEventListener('mouseleave', e => {
+        /* On soustrait le défilement de la page pour obtenir la vraie position du curseur */
+        if (e.pageY - window.scrollY <= 0) {
+            document.getElementById("titleOnglet").innerText = "tu cherche quoi ?";
+            console.log("L'utilisateur tente de sortir de la page.");
+        }
+    });
+
+    // detecte si l'utilisateur change d'onglet
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') {
+            console.log('L\'onglet est caché');
+            document.getElementById("titleOnglet").innerText = "bah alors ? tu es parti ?";
+        } else {
+            console.log('L\'onglet est visible');
+            document.getElementById("titleOnglet").innerText = "Accéléromètre V2.5";
+        }
+    });
+
+    // detecte si l'utilisateur change la taille d'ecran
+    window.addEventListener('resize', function () {
+        document.getElementById("titleOnglet").innerText = "hoo doucement !";
+        console.log('La taille de l\'écran a changé');
+    });
+
+    // detecte tout les evenements possible et affiche un message approprié soit dans la console soit dans le titre de l'onglet ou encore dans le body
+    window.addEventListener('click', function () {
+        document.getElementById("titleOnglet").innerText = "tu as cliqué";
+        console.log('L\'utilisateur a cliqué');
+    });
+
+    window.addEventListener('dblclick', function () {
+        document.getElementById("titleOnglet").innerText = "tu as double cliqué";
+        console.log('L\'utilisateur a double cliqué');
+    });
+
+    window.addEventListener('contextmenu', function () {
+        document.getElementById("titleOnglet").innerText = "tu as fait un clic droit";
+        console.log('L\'utilisateur a fait un clic droit');
+    });
+
+    window.addEventListener('keydown', function () {
+        document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
+        console.log('L\'utilisateur a appuyé sur une touche');
+    });
+
+    window.addEventListener('keyup', function () {
+        document.getElementById("titleOnglet").innerText = "tu as relaché une touche";
+        console.log('L\'utilisateur a relaché une touche');
+    });
+
+    window.addEventListener('keypress', function () {
+        document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
+        console.log('L\'utilisateur a appuyé sur une touche');
+    });
+
+    window.addEventListener('scroll', function () {
+        document.getElementById("titleOnglet").innerText = "tu as scrollé";
+        console.log('L\'utilisateur a scrollé');
+    });
+
+    window.addEventListener('wheel', function () {
+        document.getElementById("titleOnglet").innerText = "tu as scrollé";
+        console.log('L\'utilisateur a scrollé');
+    });
+
+    window.addEventListener('mouseover', function () {
+        document.getElementById("titleOnglet").innerText = "tu as survolé";
+        console.log('L\'utilisateur a survolé');
+    });
+
+    window.addEventListener('mouseout', function () {
+        document.getElementById("titleOnglet").innerText = "tu as quitté";
+        console.log('L\'utilisateur a quitté');
+    });
+
+    window.addEventListener('mouseenter', function () {
+        document.getElementById("titleOnglet").innerText = "tu es entré";
+        console.log('L\'utilisateur est entré');
+    });
+
+    window.addEventListener('mouseleave', function () {
+        document.getElementById("titleOnglet").innerText = "tu es sorti";
+        console.log('L\'utilisateur est sorti');
+    });
+
+    window.addEventListener('mousedown', function () {
+        document.getElementById("titleOnglet").innerText = "tu as cliqué";
+        console.log('L\'utilisateur a cliqué');
+    });
+
+    window.addEventListener('mouseup', function () {
+        document.getElementById("titleOnglet").innerText = "tu as relaché";
+        console.log('L\'utilisateur a relaché');
+    });
+
+    window.addEventListener('mousemove', function () {
+        document.getElementById("titleOnglet").innerText = "tu as bougé";
+        console.log('L\'utilisateur a bougé');
+    });
+
+    window.addEventListener('resize', function () {
+        document.getElementById("titleOnglet").innerText = "tu as redimensionné";
+        console.log('L\'utilisateur a redimensionné');
+    });
+
+    window.addEventListener('focus', function () {
+        document.getElementById("titleOnglet").innerText = "tu as focus";
+        console.log('L\'utilisateur a focus');
+    });
+
+    window.addEventListener('blur', function () {
+        document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
+        console.log('L\'utilisateur a perdu le focus');
+    });
+
+    window.addEventListener('focusin', function () {
+        document.getElementById("titleOnglet").innerText = "tu as focus";
+        console.log('L\'utilisateur a focus');
+    });
+
+    window.addEventListener('focusout', function () {
+        document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
+        console.log('L\'utilisateur a perdu le focus');
+    });
 </script>
 </body>
 </html>
