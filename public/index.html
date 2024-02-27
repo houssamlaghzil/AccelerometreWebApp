@@ -25,6 +25,7 @@
         h1, h2 {
             color: var(--text-color);
         }
+
         h1 {
             color: #007bff;
             text-align-last: center;
@@ -67,9 +68,10 @@
     width: 16em;
     height: 1em;
     font-size: 9px;
-">Passer au mode sombre</button>
+">Passer au mode sombre
+    </button>
 </div>
-<h1>Accéléromètre V3</h1>
+<h1>Accéléromètre V2</h1>
 <h2>Vitesse actuelle: <span id="currentSpeed">0</span> km/h</h2>
 
 
@@ -80,6 +82,7 @@
 
 <h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span> km/h</h3>
 <ul id="speedHistory"></ul>
+<ul id="save"></ul>
 
 <audio id="audio" src="music.mp3"></audio>
 
@@ -92,79 +95,59 @@
         window.addEventListener('load', function () {
             navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
                 console.log('Service Worker enregistré avec succès:', registration.scope);
+                document.getElementById("save").textContent = "Service Worker enregistré avec succès";
             }, function (err) {
-                navigator.vibrate([100, 5, 100, 2, 50]);
+                navigator.vibrate([1000, 5, 100, 2, 50]);
                 console.error("Échec de l'enregistrement du Service Worker:", err);
+                document.getElementById("save").textContent = "Échec de l'enregistrement du Service Worker" + err;
             });
         });
     }
 </script>
 
 <script>
-    let speedHistory = [];
-    let audio = document.getElementById("audio");
+
+    let audio = document.getElementById('audio');
     let audioPlayed = false;
-    let firstSpeed = null;
-    let maxSpeed = 0;
-    let speed = 0;
-    let startTime = new Date().getTime();
-    let NewAcceleration = 0;
-    let totalAcc = 0;
-    let lastUpdateTime = Date.now();
 
-
-    function calculateTotalAcc(acceleration) {
-        if (acceleration.z < 0) {
-            acceleration.z = -(Math.sqrt(acceleration.z ** 2 ));
-        }
-        else {
-            acceleration.z = Math.sqrt(acceleration.z ** 2 );
-        }
-        return acceleration.z ** 2;
-        //return Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2) * 3.6;
-    }
-
-    function updateSpeed(event) {
-        const FirstAcceleration = event.acceleration;
-
-        totalAcc = calculateTotalAcc(FirstAcceleration);
-        const deltaTime = (new Date().getTime()) - startTime;
-        speed = ((totalAcc - NewAcceleration) + speed);
-        NewAcceleration = totalAcc;
-
-
-        const speedInKm = speed / 3.6;
-        let speedList = [];
-        speedList.push(speed);
-
-        // faire la moyenne des valeurs de speedlist
-        let total = 0;
-        for (let i = 0; i < speedList.length; i++) {
-            total += speedList[i];
-        }
-        let avg = total / speedList.length;
-
-
-        if (firstSpeed === null) {
-            firstSpeed = speed;
-        }
-        speedHistory.push(speedInKm);
-        if (speedHistory.length > 10) {
-            speedHistory.shift();
-        }
-        maxSpeed = Math.max(...speedHistory);
-        if (Date.now() - lastUpdateTime >= 250) {
-            document.getElementById("currentSpeed").textContent = speedInKm.toFixed(2);
-            document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
-            lastUpdateTime = Date.now(); // Mettre à jour le dernier temps de mise à jour
-        }
-        adjustPlaybackRate(speedInKm);
-
-        if (speedInKm >= 100 && !audioPlayed) {
-            playMusic();
-            audioPlayed = true;
+    // Fonction pour mettre à jour la vitesse à partir des données GPS
+    function updateSpeed(position) {
+        // Vérifier si la vitesse est disponible dans les données de position
+        if (position.coords.speed !== null) {
+            // Convertir la vitesse de m/s en km/h
+            const speedKmh = (position.coords.speed * 3.6).toFixed(2);
+            // Mettre à jour la balise HTML avec la vitesse
+            document.getElementById('speed').innerText = speedKmh + ' km/h';
+            if (speedKmh >= 100 && !audioPlayed) {
+                playMusic();
+                audioPlayed = true;
+            }
+        } else {
+            // Si la vitesse n'est pas disponible, afficher un message d'indisponibilité
+            document.getElementById('speed').innerText = 'La vitesse n\'est pas disponible';
         }
     }
+
+    // Fonction en cas d'erreur lors de l'obtention des données GPS
+    function errorGettingSpeed(error) {
+        console.warn('Erreur lors de la récupération des données GPS : ', error.message);
+        document.getElementById('speed').innerText = 'Impossible de récupérer la vitesse';
+    }
+
+    // Obtenir la position et la vitesse à partir du GPS
+    if (navigator.geolocation) {
+        // Options pour la récupération de la vitesse
+        var options = {
+            enableHighAccuracy: true, // Utiliser une haute précision
+            maximumAge: 0 // Ne pas utiliser de cache pour la position
+        };
+        // Obtenir la position actuelle
+        navigator.geolocation.getCurrentPosition(updateSpeed, errorGettingSpeed, options);
+    } else {
+        // Si la géolocalisation n'est pas prise en charge par le navigateur
+        document.getElementById('speed').innerText = 'La géolocalisation n\'est pas prise en charge';
+    }
+
 
     function adjustPlaybackRate(currentSpeed) {
         if (currentSpeed >= 100 && currentSpeed <= 130) {
@@ -199,17 +182,6 @@
             document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
     }
-
-    if (window.DeviceMotionEvent) {
-        window.addEventListener("devicemotion", updateSpeed);
-    } else {
-        alert("Désolé, votre appareil ne supporte pas l'accéléromètre.");
-    }
-
-    setInterval(() => {
-        maxSpeed = Math.max(...speedHistory);
-        document.getElementById("maxSpeed").textContent = maxSpeed.toFixed(2);
-    }, 10000);
 </script>
 
 <script>
