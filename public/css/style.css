@@ -1,77 +1,220 @@
+@import url('https://fonts.googleapis.com/css?family=Manrope:700|Manrope:400');
+
 :root {
-    --background-color: #f4f4f4;
-    --text-color: #333;
-    --accent-color: #007bff;
-    --button-bg-color: #007bff;
-    --button-text-color: white;
-    --button-hover-bg-color: #0056b3;
+    --text: hsl(0, 0%, 99%);
+    --textDim: hsl(0, 0%, 60%);
+    --background: hsl(0, 0%, 7%);
+    --primary: hsl(155, 100%, 65%);
+    --primaryBg: hsla(155, 100%, 65%, 1%);
+    --primaryHi: hsla(155, 100%, 75%, 25%);
+    --primaryFg: hsl(155, 100%, 85%);
+    --secondary: hsl(156, 51%, 14%);
+    --secondaryFg: hsl(156, 51%, 75%);
+    --secondaryBg: hsla(156, 51%, 14%, 5%);
+    --secondaryHi: hsla(156, 51%, 30%, 50%);
+    --accent: hsl(155, 100%, 94%);
+    --accentBg: hsla(155, 100%, 94%, 1%);
+    --accentHi: hsla(155, 100%, 100%, 25%);
+}
+#TitleVitess{
+    font-size: 3em;
+    font-weight: 700;
+    letter-spacing: -2px;
+    display: flex;
+    flex-direction: row;
+    position: absolute;
+    justify-content: center;
+    align-self: center;
+    height: 100%;
+    z-index: 1000;
+    color: var(--text);
+    flex-wrap: nowrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    left: 0;
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 20px;
-    background-color: var(--background-color);
-    color: var(--text-color);
-}
-
-h1, h2 {
-    color: var(--text-color);
-}
-
-h1 {
-    color: #007bff;
-    text-align-last: center;
-}
-
-header {
+    font-family: 'Manrope', sans-serif;
+    font-weight: 400;
+    background-color: var(--background);
+    color: var(--text);
+    padding: 0 10%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.menu:hover {
+    color: var(--text);
+    cursor: pointer;
+}
+
+.sitename {
+    font-weight: bold;
+}
+
+.grid {
+    position: absolute;
+    height: 100%;
+    weight: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    z-index: -1;
+}
+
+.grid-svg {
+    height: 80%;
+    width: 80%;
+    position: relative;
+    z-index: 1;
+}
+
+.blur {
+    height: 12rem;
+    width: 12rem;
+    background-color: var(--primary);
+    filter: blur(100px);
+    border-radius: 100px;
+    z-index: 0;
+    position: absolute;
+}
+
+.title {
+    font-size: xxx-large;
+    font-weight: 700;
+    letter-spacing: -2px;
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    justify-content: center;
+    align-self: center;
+    height: 100%;
+    z-index: 1000;
+}
+
+.title > p {
+    margin: 0;
+    width: auto;
+}
+
+.title > p:nth-child(1){
+    align-self: flex-start;
+}
+
+.title > p:nth-child(2){
+    color: var(--primary);
+    align-self: flex-end;
+}
+
+.title > p:nth-child(3){
+    align-self: flex-end;
+}
+
+.material-icons {
+    display: none;
+}
+
+.button,
+button {
+    height: 50px;
+    width: 160px;
+    clip-path: path("M 0 25 C 0 -5, -5 0, 80 0 S 160 -5, 160 25, 165 50 80 50, 0 55, 0 25");
+    border: none;
+    border-radius: 13px;
+    background-color: var(--primaryBg);
+    box-shadow: 0px -3px 15px 0px var(--primaryHi) inset;
+    color: var(--primaryFg);
+    font-family: "Manrope", sans-serif;
+    font-size: 1rem;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
-}
-
-#currentSpeed, #maxSpeed {
-    font-weight: bold;
-    color: var(--accent-color);
-}
-
-button {
-    background-color: var(--button-bg-color);
-    color: var(--button-text-color);
-    border: none;
-    padding: 10px 20px;
-    margin: 10px 0;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-button:hover {
-    background-color: var(--button-hover-bg-color);
-}
-
-audio {
-    width: 100%;
-    margin-top: 20px;
-}
-
-.theme-switcher {
-    margin-bottom: 20px;
+    position: absolute;
+    transform: translateY(0px);
+    transition: all 0.2s ease;
+    z-index: 1000;
 }
 
 
-
-
-
-.viewport {
-    width: 100%;
-    height: auto;
-    overflow: hidden;
-    text-align: center;
-    position: relative;
+.button:hover > span {
+    opacity: 60%;
 }
 
-.viewport video {
-    width: 100%;
+.button:hover > button {
+    transform: translateY(5px);
+}
+
+.button.first {
+    top: 12%;
+    right: 20%;
+}
+
+.button.sec {
+    bottom: 13%;
+    right: 11%;
+}
+
+.button.sec > button {
+    background-color: var(--accentBg);
+    box-shadow: 0px -3px 15px 0px var(--accentHi) inset;
+    color: var(--accentFg);
+}
+
+.button.sec > span {
+    background-color: var(--accentHi);
+}
+
+.button.third {
+    bottom: 11%;
+    left: 15%;
+}
+
+.button.third > button {
+    background-color: var(--secondaryBg);
+    box-shadow: 0px -3px 15px 0px var(--secondary) inset;
+    color: var(--secondaryFg);
+}
+
+.button.third > span {
+    background-color: var(--secondaryHi);
+}
+/* Pour les tailles d'écran supérieures à 768px */
+@media only screen and (min-width: 768px) {
+    body {
+        padding: 0 10%; /* Réduit les marges latérales pour les grands écrans */
+    }
+}
+
+/* Pour les tailles d'écran inférieures ou égales à 768px */
+@media only screen and (max-width: 768px) {
+    body {
+        padding: 0 10%; /* Réduit les marges latérales pour les petits écrans */
+    }
+
+    .button,
+    button {
+        height: 40px;
+        width: 120px; /* Réduit la taille des boutons pour les petits écrans */
+    }
+
+    .button.first {
+        top: 30%; /* Ajuste la position des boutons pour les petits écrans */
+        right: 10%; /* Ajuste la position à droite */
+    }
+
+    .button.sec {
+        bottom: 8%;
+        right: 10%; /* Ajuste la position à droite */
+    }
+
+    .button.third {
+        bottom: 6%;
+        left: 10%; /* Ajuste la position à gauche */
+    }
 }

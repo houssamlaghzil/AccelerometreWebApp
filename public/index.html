@@ -1,101 +1,106 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html id="page" lang="fr">
 <head>
     <meta charset="UTF-8">
     <link rel="manifest" href="manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style id="themeStyle">
-        :root {
-            --background-color: #f4f4f4;
-            --text-color: #333;
-            --accent-color: #007bff;
-            --button-bg-color: #007bff;
-            --button-text-color: white;
-            --button-hover-bg-color: #0056b3;
-        }
-
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: var(--background-color);
-            color: var(--text-color);
-        }
-
-        h1, h2 {
-            color: var(--text-color);
-        }
-
-        h1 {
-            color: #007bff;
-            text-align-last: center;
-        }
-
-        #currentSpeed, #maxSpeed {
-            font-weight: bold;
-            color: var(--accent-color);
-        }
-
-        button {
-            background-color: var(--button-bg-color);
-            color: var(--button-text-color);
-            border: none;
-            padding: 10px 20px;
-            margin: 10px 0;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-        }
-
-        button:hover {
-            background-color: var(--button-hover-bg-color);
-        }
-
-        audio {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        .theme-switcher {
-            margin-bottom: 20px;
-        }
-    </style>
-    <title id="titleOnglet">Accéléromètre V2.5</title>
+    <link rel="stylesheet" href="css/style.css">
+    <title id="titleOnglet">Accéléromètre V3.3</title>
 </head>
-<body id="page">
-<div class="theme-switcher">
-    <button onclick="toggleTheme()" style="
-    width: 16em;
-    height: 1em;
-    font-size: 9px;
-">Passer au mode sombre
-    </button>
+
+<div class="grid">
+    <svg class="grid-svg" xmlns="http://www.w3.org/2000/svg" width="982" height="786" viewBox="0 0 982 786" fill="none">
+        <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M490 401V537H348.5V401H490ZM490 785.5V676H348.5V785.5H347.5V676H206V785.5H205V676H63.5V785.5H62.5V676H0V675H62.5V538H0V537H62.5V401H0V400H62.5V258H0V257H62.5V116H0V115H62.5V0H63.5V115L205 115V0H206V115L347.5 115V0H348.5V115H490V0H491V115L627.5 115V0H628.5V115H765V0H766V115L902.5 115V0H903.5V115H982V116H903.5V257H982V258H903.5V400H982V401H903.5V537H982V538H903.5V675H982V676H903.5V785.5H902.5V676H766V785.5H765V676H628.5V785.5H627.5V676H491V785.5H490ZM902.5 675V538H766V675H902.5ZM902.5 537V401H766V537H902.5ZM902.5 400V258H766V400H902.5ZM902.5 257V116L766 116V257H902.5ZM627.5 675H491V538H627.5V675ZM765 675H628.5V538H765V675ZM348.5 675H490V538H348.5V675ZM347.5 538V675H206V538H347.5ZM205 538V675H63.5V538H205ZM765 537V401H628.5V537H765ZM765 400V258H628.5V400H765ZM765 257V116H628.5V257H765ZM347.5 401V537H206V401H347.5ZM205 401V537H63.5V401H205ZM627.5 401V537H491V401H627.5ZM627.5 116L491 116V257H627.5V116ZM627.5 258H491V400H627.5V258ZM63.5 257V116L205 116V257H63.5ZM63.5 400V258H205V400H63.5ZM206 116V257H347.5V116L206 116ZM348.5 116V257H490V116H348.5ZM206 400V258H347.5V400H206ZM348.5 258V400H490V258H348.5Z"
+              fill="url(#paint0_radial_1_8)"/>
+        <defs>
+            <radialGradient id="paint0_radial_1_8" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                            gradientTransform="translate(491 392.75) rotate(90) scale(513.25 679.989)">
+                <stop stop-color="white" stop-opacity="0.2" offset="0"/>
+                <stop offset="1" stop-color="#000" stop-opacity="0"/>
+            </radialGradient>
+        </defs>
+    </svg>
+    <div class="blur"></div>
 </div>
-<h1>Accéléromètre V2.5</h1>
-<h2>Vitesse actuelle: <span id="currentSpeed">0</span></h2>
 
+<div class="title">
+    <p>Accéléromètre</p>
+    <p>V3.3.1</p>
+    <p><span></span></p>
+</div>
 
-<span id="calculateTotalAcc"></span>
-<br>
-<span id="speed"></span>
+<p id="TitleVitess">Vitesse : <span id="currentSpeed">0</span></p>
+<p id="Titlescore">score : <span id="currentscore">0</span></p>
 
+<a class="button first" onclick="playMusic()">
+    <button onclick="playMusic()">Play Music</button>
+    <span onclick="playMusic()"></span></a>
 
-<h3>Vitesse maximale (10 dernières secondes): <span id="maxSpeed">0</span></h3>
-<ul id="speedHistory"></ul>
-<ul id="save"></ul>
+<a class="button sec" onclick="stopMusic()">
+    <button onclick="stopMusic()">Stop Music</button>
+    <span onclick="stopMusic()"></span></a>
+
+<a class="button third"  onclick="clearCacheAndCookies()">
+    <button id="updateButton">Clear</button>
+    <span></span></a>
+
+<svg class="top-right" width="219" height="147" viewBox="0 0 219 147" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect opacity="0.18" x="10.4252" y="75.8326" width="7.50168" height="7.50168"
+          transform="rotate(110.283 10.4252 75.8326)" fill="#686868" stroke="white" stroke-width="1.22683"/>
+    <rect opacity="0.18" x="180.869" y="138.825" width="7.50168" height="7.50168"
+          transform="rotate(110.283 180.869 138.825)" fill="#686868" stroke="white" stroke-width="1.22683"/>
+    <rect x="69.4713" y="-91.84" width="180.485" height="180.485" transform="rotate(20.2832 69.4713 -91.84)"
+          stroke="white" stroke-opacity="0.1" stroke-width="1.22683"/>
+</svg>
+
+<svg class="bottom-left" width="232" height="191" viewBox="0 0 232 191" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50.5685" cy="172.432" r="112.068" stroke="white" stroke-opacity="0.09"/>
+    <g opacity="0.1">
+        <path d="M26.4932 5.20547L228.856 172.432" stroke="#D9D9D9"/>
+        <rect x="22.4384" y="0.5" width="6.15753" height="6.15753" fill="#686868" stroke="white"/>
+        <rect x="224.801" y="169.027" width="6.15753" height="6.15753" fill="#686868" stroke="white"/>
+        <circle cx="121.819" cy="83.613" r="1.7774" fill="#323232" stroke="white"/>
+    </g>
+</svg>
 
 <audio id="audio" src="music.mp3"></audio>
 
-<button onclick="playMusic()">Lire la musique</button>
-<button onclick="stopMusic()">Arrêter la musique</button>
-<button onclick="clearCacheAndCookies()">Vider le cache et supprimer les cookies</button>
+<script>
+    // Fonction pour calculer l'accélération totale
+    function calculateAcceleration(acceleration) {
+        return Math.sqrt(acceleration.x ** 2 + acceleration.y ** 2 + acceleration.z ** 2);
+    }
+
+    // Fonction pour vérifier si l'accélération dépasse le seuil
+    function checkAcceleration(event) {
+        // Récupérer l'accélération
+        var acceleration = event.accelerationIncludingGravity;
+
+        // Calculer l'accélération totale
+        var totalAcceleration = calculateAcceleration(acceleration);
+
+        // Seuil de vitesse en m/s² (correspondant à environ 100 km/h)
+        var threshold = 9.81 * 2;
+
+        // Vérifier si l'accélération dépasse le seuil
+        if (totalAcceleration >= threshold) {
+            // Rediriger vers l'URL spécifiée
+            window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ";
+        }
+    }
+
+    // Écouter l'événement DeviceMotion
+    window.addEventListener("devicemotion", checkAcceleration);
+
+
+</script>
 
 <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function () {
             navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
                 console.log('Service Worker enregistré avec succès:', registration.scope);
-                document.getElementById("save").textContent = "Service Worker enregistré avec succès";
             }, function (err) {
                 navigator.vibrate([1000, 5, 100, 2, 50]);
                 console.error("Échec de l'enregistrement du Service Worker:", err);
@@ -103,6 +108,43 @@
             });
         });
     }
+
+
+
+
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Écouter les messages du service worker
+    navigator.serviceWorker.addEventListener('message', function(event) {
+        if (event.data === 'reloadPage') {
+            // Recharger la page
+            window.location.reload();
+        }
+    });
+
+    // Fonction pour envoyer un message au service worker
+    function sendMessageToServiceWorker(message) {
+        return new Promise(function(resolve, reject) {
+            // Vérifier si le service worker est pris en charge par le navigateur
+            if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+                // Envoyer le message au service worker
+                navigator.serviceWorker.controller.postMessage(message);
+                resolve();
+            } else {
+                reject(new Error('Service Worker not supported or not yet controlling.'));
+            }
+        });
+    }
+
+    // Événement de clic sur le bouton de mise à jour
+    document.getElementById('updateButton').addEventListener('click', function() {
+        // Envoyer un message au service worker pour demander une mise à jour
+        sendMessageToServiceWorker('skipWaiting').then(function() {
+            console.log('Message envoyé au Service Worker pour mise à jour.');
+        }).catch(function(error) {
+            console.error('Erreur lors de l\'envoi du message au Service Worker:', error);
+        });
+    });
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////
 </script>
 
 <script>
@@ -112,7 +154,6 @@
 
     // Fonction pour mettre à jour la vitesse à partir des données GPS
     function updateSpeed(position) {
-        document.getElementById('currentSpeed').innerHTML = '.';
         // Vérifier si la vitesse est disponible dans les données de position
         if (position.coords.speed !== null) {
             // Convertir la vitesse de m/s en km/h
@@ -124,10 +165,8 @@
                 playMusic();
                 audioPlayed = true;
             }
-        } else {
-            // Si la vitesse n'est pas disponible, afficher un message d'indisponibilité
-            document.getElementById('speed').innerText = 'La vitesse n\'est pas disponible';
         }
+
     }
 
     // Fonction en cas d'erreur lors de l'obtention des données GPS
@@ -139,21 +178,19 @@
 
     // Obtenir la position et la vitesse à partir du GPS
     if (navigator.geolocation) {
-        document.getElementById('currentSpeed').innerHTML = '..';
         // Options pour la récupération de la vitesse
-        var options = {
+        const options = {
             enableHighAccuracy: true, // Utiliser une haute précision
             maximumAge: 0 // Ne pas utiliser de cache pour la position
         };
         // Obtenir la position actuelle
         setInterval(function () {
-            document.getElementById('currentSpeed').innerHTML = '...';
             navigator.geolocation.getCurrentPosition(updateSpeed, errorGettingSpeed, options);
             adjustPlaybackRate(document.getElementById('currentSpeed').innerText);
         }, 400);
     } else {
         // Si la géolocalisation n'est pas prise en charge par le navigateur
-        document.getElementById('speed').innerText = 'La géolocalisation n\'est pas prise en charge';
+        document.getElementById('Speed').innerText = 'La géolocalisation n\'est pas prise en charge';
     }
 
 
@@ -165,11 +202,17 @@
         }
     }
 
+
     function playMusic() {
+        document.getElementById('currentSpeed').innerText = '100 km/h';
+        audioPlayed = true;
         audio.play();
+
     }
 
     function stopMusic() {
+        document.getElementById('currentSpeed').innerText = '0 km/h';
+
         navigator.vibrate([10, 5, 10, 2, 50]);
         audio.pause();
         audio.currentTime = 0;
@@ -182,7 +225,15 @@
             caches.keys().then(function (cacheNames) {
                 cacheNames.forEach(function (cacheName) {
                     caches.delete(cacheName);
+                    document.cookie.split(";").forEach(function (c) {
+                        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                        console.log('cookie deleted');
+                    });
                 });
+            });
+        } else {
+            document.cookie.split(";").forEach(function (c) {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
             });
         }
 
@@ -194,163 +245,318 @@
 </script>
 
 <script>
-    // Votre script JavaScript reste inchangé
-
-    let isDarkMode = false;
-
-    function toggleTheme() {
-        navigator.vibrate([10, 5, 10, 2, 10]);
-        isDarkMode = !isDarkMode;
-
-        if (isDarkMode) {
-            document.documentElement.style.setProperty('--background-color', '#333');
-            document.documentElement.style.setProperty('--text-color', '#f4f4f4');
-            document.documentElement.style.setProperty('--accent-color', '#4d9fea');
-            document.documentElement.style.setProperty('--button-bg-color', '#555');
-            document.documentElement.style.setProperty('--button-text-color', '#fff');
-            document.documentElement.style.setProperty('--button-hover-bg-color', '#777');
-            document.querySelector('.theme-switcher button').textContent = 'Passer au mode clair';
-        } else {
-            document.documentElement.style.setProperty('--background-color', '#f4f4f4');
-            document.documentElement.style.setProperty('--text-color', '#333');
-            document.documentElement.style.setProperty('--accent-color', '#007bff');
-            document.documentElement.style.setProperty('--button-bg-color', '#007bff');
-            document.documentElement.style.setProperty('--button-text-color', 'white');
-            document.documentElement.style.setProperty('--button-hover-bg-color', '#0056b3');
-            document.querySelector('.theme-switcher button').textContent = 'Passer au mode sombre';
-        }
-    }
-</script>
-
-<script>
-
-
-    const mouseTarget = document.getElementById('page'); // Remplacez 'page' par l'ID de votre élément <body>
-    mouseTarget.addEventListener('mouseleave', e => {
-        /* On soustrait le défilement de la page pour obtenir la vraie position du curseur */
-        if (e.pageY - window.scrollY <= 0) {
-            document.getElementById("titleOnglet").innerText = "tu cherche quoi ?";
-            console.log("L'utilisateur tente de sortir de la page.");
-        }
-    });
+    let score = 0;
+    let check_visibilitychange;
 
     // detecte si l'utilisateur change d'onglet
     document.addEventListener('visibilitychange', function () {
-        if (document.visibilityState === 'hidden') {
-            console.log('L\'onglet est caché');
-            document.getElementById("titleOnglet").innerText = "bah alors ? tu es parti ?";
-        } else {
-            console.log('L\'onglet est visible');
-            document.getElementById("titleOnglet").innerText = "Accéléromètre V2.5";
+        if (!check_visibilitychange) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            if (document.visibilityState === 'hidden') {
+                console.log('L\'onglet est caché');
+                document.getElementById("titleOnglet").innerText = "bah alors ? tu es parti ?";
+                return check_visibilitychange = true;
+            } else {
+                console.log('L\'onglet est visible');
+                document.getElementById("titleOnglet").innerText = "Accéléromètre V2.5";
+                return check_visibilitychange = true;
+            }
         }
     });
-
+    let check_resized;
     // detecte si l'utilisateur change la taille d'ecran
     window.addEventListener('resize', function () {
+        if (!check_resized) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('La taille de l\'écran a changé');
+            document.getElementById("titleOnglet").innerText = "hoo doucement !";
+            return check_resized = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "hoo doucement !";
         console.log('La taille de l\'écran a changé');
     });
 
+    let check_click;
     // detecte tout les evenements possible et affiche un message approprié soit dans la console soit dans le titre de l'onglet ou encore dans le body
     window.addEventListener('click', function () {
+        if (!check_click) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a cliqué');
+            document.getElementById("titleOnglet").innerText = "tu as cliqué";
+            return check_click = true;
+        }
         document.getElementById("titleOnglet").innerText = "tu as cliqué";
         console.log('L\'utilisateur a cliqué');
     });
 
+    let check_dblclick;
     window.addEventListener('dblclick', function () {
+        if (!check_dblclick) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a double cliqué');
+            document.getElementById("titleOnglet").innerText = "tu as double cliqué";
+            return check_dblclick = true;
+        }
         document.getElementById("titleOnglet").innerText = "tu as double cliqué";
         console.log('L\'utilisateur a double cliqué');
     });
 
+    let check_contextmenu;
     window.addEventListener('contextmenu', function () {
+        if (!check_contextmenu) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a fait un clic droit');
+            document.getElementById("titleOnglet").innerText = "tu as fait un clic droit";
+            return check_contextmenu = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as fait un clic droit";
         console.log('L\'utilisateur a fait un clic droit');
     });
 
+    let check_keydown;
     window.addEventListener('keydown', function () {
+        if (!check_keydown) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a appuyé sur une touche');
+            document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
+            return check_keydown = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
         console.log('L\'utilisateur a appuyé sur une touche');
     });
 
+    let check_keyup;
     window.addEventListener('keyup', function () {
+        if (!check_keyup) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a relaché une touche');
+            document.getElementById("titleOnglet").innerText = "tu as relaché une touche";
+            return check_keyup = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as relaché une touche";
         console.log('L\'utilisateur a relaché une touche');
     });
 
+    let check_keypress;
     window.addEventListener('keypress', function () {
+        if (!check_keypress) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a appuyé sur une touche');
+            document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
+            return check_keypress = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as appuyé sur une touche";
         console.log('L\'utilisateur a appuyé sur une touche');
     });
 
+    let check_scroll;
     window.addEventListener('scroll', function () {
+        if (!check_scroll) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a scrollé');
+            document.getElementById("titleOnglet").innerText = "tu as scrollé";
+            return check_scroll = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as scrollé";
         console.log('L\'utilisateur a scrollé');
     });
 
+    let check_wheel;
     window.addEventListener('wheel', function () {
+        if (!check_wheel) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a scrollé');
+            document.getElementById("titleOnglet").innerText = "tu as scrollé";
+            return check_wheel = true;
+        }
+
+
         document.getElementById("titleOnglet").innerText = "tu as scrollé";
         console.log('L\'utilisateur a scrollé');
     });
 
+    let check_mouseover;
     window.addEventListener('mouseover', function () {
+        if (!check_mouseover) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a survolé');
+            document.getElementById("titleOnglet").innerText = "tu as survolé";
+            return check_mouseover = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as survolé";
         console.log('L\'utilisateur a survolé');
     });
 
+    let check_mouseout;
     window.addEventListener('mouseout', function () {
+        if (!check_mouseout) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a quitté');
+            document.getElementById("titleOnglet").innerText = "tu as quitté";
+            return check_mouseout = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as quitté";
         console.log('L\'utilisateur a quitté');
     });
 
+    let check_mouseenter;
     window.addEventListener('mouseenter', function () {
+        if (!check_mouseenter) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur est entré');
+            document.getElementById("titleOnglet").innerText = "tu es entré";
+            return check_mouseenter = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu es entré";
         console.log('L\'utilisateur est entré');
     });
 
+    let check_mouseleave;
     window.addEventListener('mouseleave', function () {
+        if (!check_mouseleave) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur est sorti');
+            document.getElementById("titleOnglet").innerText = "tu es sorti";
+            return check_mouseleave = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu es sorti";
         console.log('L\'utilisateur est sorti');
     });
 
+    let check_mousedown;
     window.addEventListener('mousedown', function () {
+        if (!check_mousedown) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a cliqué');
+            document.getElementById("titleOnglet").innerText = "tu as cliqué";
+            return check_mousedown = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as cliqué";
         console.log('L\'utilisateur a cliqué');
     });
 
+    let check_mouseup;
     window.addEventListener('mouseup', function () {
+        if (!check_mouseup) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a relaché');
+            document.getElementById("titleOnglet").innerText = "tu as relaché";
+            return check_mouseup = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as relaché";
         console.log('L\'utilisateur a relaché');
     });
 
+    let check_mousemove;
     window.addEventListener('mousemove', function () {
+        if (!check_mousemove) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a bougé');
+            document.getElementById("titleOnglet").innerText = "tu as bougé";
+            return check_mousemove = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as bougé";
         console.log('L\'utilisateur a bougé');
     });
 
+    let check_resize;
     window.addEventListener('resize', function () {
+        if (!check_resize) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a redimensionné');
+            document.getElementById("titleOnglet").innerText = "tu as redimensionné";
+            return check_resize = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as redimensionné";
         console.log('L\'utilisateur a redimensionné');
     });
 
+    let check_focus;
     window.addEventListener('focus', function () {
+        if (!check_focus) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a focus');
+            document.getElementById("titleOnglet").innerText = "tu as focus";
+            return check_focus = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as focus";
         console.log('L\'utilisateur a focus');
     });
 
+    let check_blur;
     window.addEventListener('blur', function () {
+        if (!check_blur) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a perdu le focus');
+            document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
+            return check_blur = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
         console.log('L\'utilisateur a perdu le focus');
     });
 
+    let check_focusin;
     window.addEventListener('focusin', function () {
+        if (!check_focusin) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a focus');
+            document.getElementById("titleOnglet").innerText = "tu as focus";
+            return check_focusin = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as focus";
         console.log('L\'utilisateur a focus');
     });
 
+    let check_focusout;
     window.addEventListener('focusout', function () {
+        if (!check_focusout) {
+            score++
+            document.getElementById('currentscore').innerText = score + ' /23';
+            console.log('L\'utilisateur a perdu le focus');
+            document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
+            return check_focusout = true;
+        }
+
         document.getElementById("titleOnglet").innerText = "tu as perdu le focus";
         console.log('L\'utilisateur a perdu le focus');
     });
 </script>
-</body>
 </html>

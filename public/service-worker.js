@@ -1,5 +1,3 @@
-// service-worker.js
-
 // Version du cache
 var cacheVersion = 'v2';
 
@@ -11,6 +9,7 @@ self.addEventListener('install', function(event) {
             return cache.addAll([
                 '/',
                 '/index.html',
+                '/css/style.css',
                 '/manifest.json',
                 '/music.mp3',
                 '/icon.png'
@@ -44,6 +43,12 @@ self.addEventListener('message', function(event) {
     if (event.data === 'skipWaiting') {
         self.skipWaiting().then(function() {
             console.log('Le Service Worker est maintenant actif');
+            // Recharger la page après la mise à jour du cache
+            self.clients.matchAll().then(function(clients) {
+                clients.forEach(function(client) {
+                    client.postMessage('reloadPage');
+                });
+            });
         });
     }
 });
